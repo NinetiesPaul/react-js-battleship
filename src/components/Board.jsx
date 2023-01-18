@@ -1,18 +1,111 @@
-import { React, Component } from "react";
+import { React } from "react";
+import { Component } from 'react';
+import { Container } from '@mui/material';
+import { Button } from "@material-ui/core";
 
 class Board extends Component {
 
-    letters = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    constructor()
+    {
+        super();
+
+        this.gameStage = 1;
+
+        this.shipPositions = [];
+        this.currentSelectedShip = "";
+        this.currentSelectedShipOrientation = "";
+        this.warning = "";
+    }
+
+    handleClickCell(event)
+    {
+        if (this.gameStage === 1) {
+            if (this.currentSelectedShip !== "" && this.currentSelectedShipOrientation !== "") {
+
+                this.warning = "";
+                /*if (this.currentSelectedShip > 1 && 
+                    ((event.target.getAttribute("py") + this.currentSelectedShip) > 9)) {
+
+                    console.log("invalid", event.target.getAttribute("py"), this.currentSelectedShip)
+                    this.warning = "Invalid position!";
+                    return false;
+                }*/
+
+                const data = {
+                    shipSize: this.currentSelectedShip,
+                    shipVisualPosition: event.target.id,
+                    shipLogicPosition: [event.target.getAttribute("px"), event.target.getAttribute("py")],
+                    shipOrientation: this.currentSelectedShipOrientation
+                };
+
+                this.props.cellInteraction(data)
+
+                this.currentSelectedShip = "";
+            }
+        }
+    }
+
+    
+
+    handleClickShipSelectionButton(size)
+    {
+        if (this.gameStage === 1) {
+            this.currentSelectedShip = size;
+        }
+    }
+
+    handleClickShipOrientationButton(orientation)
+    {
+        if (this.gameStage === 1) {
+            this.currentSelectedShipOrientation = orientation;
+        }
+    }
+
+    handleStartGame()
+    {
+        if (this.gameStage === 1) {
+            this.gameStage += 1;
+        }
+    }
 
     render()
     {
+        const letters = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+
         return (
-            <section>
+            <Container component="article" maxWidth="sm">
+                <span id="shipSizeSelection">
+                    <Button
+                    onClick={() => this.handleClickShipSelectionButton(1)}
+                    disabled={this.props.shipButtonsStatus.isDestroyerSet}>Destroyer</Button>
+
+                    <Button
+                    onClick={() => this.handleClickShipSelectionButton(2)}
+                    disabled={this.props.shipButtonsStatus.isSubmarineSet}>Submarine</Button>
+
+                    <Button
+                    onClick={() => this.handleClickShipSelectionButton(3)}
+                    disabled={this.props.shipButtonsStatus.isCruiserSet}>Cruiser</Button>
+
+                    <Button
+                    onClick={() => this.handleClickShipSelectionButton(4)}
+                    disabled={this.props.shipButtonsStatus.isBattleshipSet}>Battleship</Button>
+
+                    <Button
+                    onClick={() => this.handleClickShipSelectionButton(5)}
+                    disabled={this.props.shipButtonsStatus.isCarrierSet}>Carrier</Button>
+                </span><br/>
+
+                <span id="shipOrientationSelection">
+                    <Button onClick={() => this.handleClickShipOrientationButton("leftToRight")}>Horizontally</Button>
+                    <Button onClick={() => this.handleClickShipOrientationButton("topToBottom")}>Vertically</Button>
+                </span><br/>
+
                 <table id="board">
                     <thead>
                         <tr>
                             {
-                                this.letters.map((k,i) => {
+                                letters.map((k,i) => {
                                     return(
                                         <td key={i}>{k}</td>
                                     )
@@ -30,10 +123,12 @@ class Board extends Component {
                                                 Array(10).fill("").map((k,cell_i) => {
                                                     return(
                                                         <td
-                                                        id={row_i + "_" + cell_i}
+                                                        id={letters[cell_i + 1] + "_" + (row_i + 1)}
+                                                        px={row_i}
+                                                        py={cell_i}
                                                         key={cell_i}
-                                                        onClick={(event) => {console.log(event.target.id)}}
-                                                        ></td>
+                                                        onClick={this.handleClickCell.bind(this)}
+                                                        >{this.props.shipPositions[row_i][cell_i]}</td>
                                                     )
                                                 })
                                             }
@@ -43,7 +138,15 @@ class Board extends Component {
                             }
                     </tbody>
                 </table>
-            </section>
+
+                <span>
+                    {this.warning}
+                </span>
+
+                <span>
+                    <Button onClick={() => this.handleStartGame(1)}>Start Game</Button>
+                </span>
+            </Container>
         )
     }
 }
