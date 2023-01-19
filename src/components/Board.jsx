@@ -22,19 +22,22 @@ class Board extends Component {
         if (this.gameStage === 1) {
             if (this.currentSelectedShip !== "" && this.currentSelectedShipOrientation !== "") {
 
+                var posX = parseInt(event.target.getAttribute("px"));
+                var posY = parseInt(event.target.getAttribute("py"));
+
                 this.warning = "";
                 if (this.currentSelectedShip > 1 && 
-                    (this.currentSelectedShipOrientation === "leftToRight" && (parseInt(event.target.getAttribute("px")) + this.currentSelectedShip) > 10) ||
-                    (this.currentSelectedShipOrientation === "topToBottom" && (parseInt(event.target.getAttribute("py")) + this.currentSelectedShip) > 10)) {
+                    (this.currentSelectedShipOrientation === "leftToRight" && (posX + this.currentSelectedShip) > 10) ||
+                    (this.currentSelectedShipOrientation === "topToBottom" && (posY + this.currentSelectedShip) > 10)) {
                     //this.warning = "Invalid position!";
                     return false;
                 }
 
                 var positionsToDraw = [];
                 for (var i = 0; i < this.currentSelectedShip; i++) {
-                    var posX = (this.currentSelectedShipOrientation === "leftToRight") ? parseInt(event.target.getAttribute("px")) + i : parseInt(event.target.getAttribute("px"));
-                    var posY = (this.currentSelectedShipOrientation === "topToBottom") ? parseInt(event.target.getAttribute("py")) + i : parseInt(event.target.getAttribute("py"));
-                    positionsToDraw.push([posX, posY]);
+                    var pX = (this.currentSelectedShipOrientation === "leftToRight") ? posX + i : posX;
+                    var pY = (this.currentSelectedShipOrientation === "topToBottom") ? posY + i : posY;
+                    positionsToDraw.push([pX, pY]);
                 }
 
                 const data = {
