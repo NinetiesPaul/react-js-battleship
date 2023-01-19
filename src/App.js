@@ -10,52 +10,60 @@ class App extends Component
 		super();
 
 		this.state = {
-			isDestroyerSet: false,
-			isSubmarineSet: false,
-			isCruiserSet: false,
-			isBattleshipSet: false,
-			isCarrierSet: false,
+			shipButtonsStatus: {
+				isDestroyerSet: false,
+				isSubmarineSet: false,
+				isCruiserSet: false,
+				isBattleshipSet: false,
+				isCarrierSet: false,
+			},
+			message: "",
 			shipPositions: [["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""]]
 		}
 	}
 
 	cellInteraction(data)
 	{
-		const stateUpdate = {}
+		const stateUpdate = this.state;
+
 		let shipToDraw = "";
 		
 		if (data.shipSize === 1) {
-			stateUpdate.isDestroyerSet = true;
+			stateUpdate.shipButtonsStatus.isDestroyerSet = true;
 			shipToDraw = "D";
 		}
 
 		if (data.shipSize === 2) {
-			stateUpdate.isSubmarineSet = true;
+			stateUpdate.shipButtonsStatus.isSubmarineSet = true;
 			shipToDraw = "S";
 		}
 
 		if (data.shipSize === 3) {
-			stateUpdate.isCruiserSet = true;
+			stateUpdate.shipButtonsStatus.isCruiserSet = true;
 			shipToDraw = "Cr";
 		}
 
 		if (data.shipSize === 4) {
-			stateUpdate.isBattleshipSet = true;
+			stateUpdate.shipButtonsStatus.isBattleshipSet = true;
 			shipToDraw = "B";
 		}
 
 		if (data.shipSize === 5) {
-			stateUpdate.isCarrierSet = true;
+			stateUpdate.shipButtonsStatus.isCarrierSet = true;
 			shipToDraw = "Ca";
 		}
 
-		const currentGrid = this.state.shipPositions;
 		data.shipLogicPosition.forEach(element => {
-			currentGrid[element[1]][element[0]] = shipToDraw;
+			stateUpdate.shipPositions[element[1]][element[0]] = shipToDraw;
 		});
-		stateUpdate.shipPositions = currentGrid;
+		stateUpdate.message = "";
 
 		this.setState(stateUpdate);
+	}
+
+	setMessage(msg)
+	{
+		this.setState({message: msg});
 	}
 
 	render()
@@ -63,9 +71,11 @@ class App extends Component
 		return(
 			<section>
 				<Board
-				shipButtonsStatus={this.state}
+				message={this.state.message}
+				shipButtonsStatus={this.state.shipButtonsStatus}
+				shipPositions={this.state.shipPositions}
 				cellInteraction={this.cellInteraction.bind(this)}
-				shipPositions={this.state.shipPositions} />
+				setMessage={this.setMessage.bind(this)}/>
 			</section>
 		)
 	};

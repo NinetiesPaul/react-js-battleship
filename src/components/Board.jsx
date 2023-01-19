@@ -14,7 +14,6 @@ class Board extends Component {
         this.shipPositions = [];
         this.currentSelectedShip = "";
         this.currentSelectedShipOrientation = "";
-        this.warning = "";
     }
 
     handleClickCell(event)
@@ -25,11 +24,11 @@ class Board extends Component {
                 var posX = parseInt(event.target.getAttribute("px"));
                 var posY = parseInt(event.target.getAttribute("py"));
 
-                this.warning = "";
+                
                 if (this.currentSelectedShip > 1 && 
-                    (this.currentSelectedShipOrientation === "leftToRight" && (posX + this.currentSelectedShip) > 10) ||
-                    (this.currentSelectedShipOrientation === "topToBottom" && (posY + this.currentSelectedShip) > 10)) {
-                    //this.warning = "Invalid position!";
+                    ((this.currentSelectedShipOrientation === "leftToRight" && (posX + this.currentSelectedShip) > 10) ||
+                    (this.currentSelectedShipOrientation === "topToBottom" && (posY + this.currentSelectedShip) > 10))) {
+                    this.props.setMessage("Invalid position!");
                     return false;
                 }
 
@@ -149,7 +148,7 @@ class Board extends Component {
                 </table>
 
                 <span>
-                    {this.warning}
+                    {this.props.message}
                 </span>
 
                 <span>
