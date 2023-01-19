@@ -22,30 +22,37 @@ class App extends Component
 	cellInteraction(data)
 	{
 		const stateUpdate = {}
-
+		let shipToDraw = "";
 		
 		if (data.shipSize === 1) {
 			stateUpdate.isDestroyerSet = true;
+			shipToDraw = "D";
 		}
 
 		if (data.shipSize === 2) {
 			stateUpdate.isSubmarineSet = true;
+			shipToDraw = "S";
 		}
 
 		if (data.shipSize === 3) {
 			stateUpdate.isCruiserSet = true;
+			shipToDraw = "Cr";
 		}
 
 		if (data.shipSize === 4) {
 			stateUpdate.isBattleshipSet = true;
+			shipToDraw = "B";
 		}
 
 		if (data.shipSize === 5) {
 			stateUpdate.isCarrierSet = true;
+			shipToDraw = "Ca";
 		}
 
 		const currentGrid = this.state.shipPositions;
-		currentGrid[data.shipLogicPosition[0]][data.shipLogicPosition[1]] = "X";
+		data.shipLogicPosition.forEach(element => {
+			currentGrid[element[1]][element[0]] = shipToDraw;
+		});
 		stateUpdate.shipPositions = currentGrid;
 
 		this.setState(stateUpdate);

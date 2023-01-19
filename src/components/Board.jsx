@@ -23,18 +23,24 @@ class Board extends Component {
             if (this.currentSelectedShip !== "" && this.currentSelectedShipOrientation !== "") {
 
                 this.warning = "";
-                /*if (this.currentSelectedShip > 1 && 
-                    ((event.target.getAttribute("py") + this.currentSelectedShip) > 9)) {
-
-                    console.log("invalid", event.target.getAttribute("py"), this.currentSelectedShip)
-                    this.warning = "Invalid position!";
+                if (this.currentSelectedShip > 1 && 
+                    (this.currentSelectedShipOrientation === "leftToRight" && (parseInt(event.target.getAttribute("px")) + this.currentSelectedShip) > 10) ||
+                    (this.currentSelectedShipOrientation === "topToBottom" && (parseInt(event.target.getAttribute("py")) + this.currentSelectedShip) > 10)) {
+                    //this.warning = "Invalid position!";
                     return false;
-                }*/
+                }
+
+                var positionsToDraw = [];
+                for (var i = 0; i < this.currentSelectedShip; i++) {
+                    var posX = (this.currentSelectedShipOrientation === "leftToRight") ? parseInt(event.target.getAttribute("px")) + i : parseInt(event.target.getAttribute("px"));
+                    var posY = (this.currentSelectedShipOrientation === "topToBottom") ? parseInt(event.target.getAttribute("py")) + i : parseInt(event.target.getAttribute("py"));
+                    positionsToDraw.push([posX, posY]);
+                }
 
                 const data = {
                     shipSize: this.currentSelectedShip,
                     shipVisualPosition: event.target.id,
-                    shipLogicPosition: [event.target.getAttribute("px"), event.target.getAttribute("py")],
+                    shipLogicPosition: positionsToDraw,
                     shipOrientation: this.currentSelectedShipOrientation
                 };
 
@@ -124,8 +130,8 @@ class Board extends Component {
                                                     return(
                                                         <td
                                                         id={letters[cell_i + 1] + "_" + (row_i + 1)}
-                                                        px={row_i}
-                                                        py={cell_i}
+                                                        px={cell_i}
+                                                        py={row_i}
                                                         key={cell_i}
                                                         onClick={this.handleClickCell.bind(this)}
                                                         >{this.props.shipPositions[row_i][cell_i]}</td>
