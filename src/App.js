@@ -17,8 +17,9 @@ class App extends Component
 				isBattleshipSet: false,
 				isCarrierSet: false,
 			},
+			playerPositions: [],
 			message: "",
-			shipPositions: [["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""]]
+			myBoard: [["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""]]
 		}
 	}
 
@@ -54,7 +55,8 @@ class App extends Component
 		}
 
 		data.shipLogicPosition.forEach(element => {
-			stateUpdate.shipPositions[element[1]][element[0]] = shipToDraw;
+			stateUpdate.myBoard[element[1]][element[0]] = shipToDraw;
+			stateUpdate.playerPositions.push(element.join());
 		});
 		stateUpdate.message = "";
 
@@ -73,7 +75,8 @@ class App extends Component
 				<Board
 				message={this.state.message}
 				shipButtonsStatus={this.state.shipButtonsStatus}
-				shipPositions={this.state.shipPositions}
+				myBoard={this.state.myBoard}
+				playerPositions={this.state.playerPositions}
 				cellInteraction={this.cellInteraction.bind(this)}
 				setMessage={this.setMessage.bind(this)}/>
 			</section>

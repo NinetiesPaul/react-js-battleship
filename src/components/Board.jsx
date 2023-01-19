@@ -11,7 +11,6 @@ class Board extends Component {
 
         this.gameStage = 1;
 
-        this.shipPositions = [];
         this.currentSelectedShip = "";
         this.currentSelectedShipOrientation = "";
     }
@@ -36,6 +35,13 @@ class Board extends Component {
                 for (var i = 0; i < this.currentSelectedShip; i++) {
                     var pX = (this.currentSelectedShipOrientation === "leftToRight") ? posX + i : posX;
                     var pY = (this.currentSelectedShipOrientation === "topToBottom") ? posY + i : posY;
+
+
+
+                    if (this.props.playerPositions.includes([pX, pY].join())){
+                        this.props.setMessage("Invalid position!");
+                        return false;
+                    };
                     positionsToDraw.push([pX, pY]);
                 }
 
@@ -136,7 +142,7 @@ class Board extends Component {
                                                         py={row_i}
                                                         key={cell_i}
                                                         onClick={this.handleClickCell.bind(this)}
-                                                        >{this.props.shipPositions[row_i][cell_i]}</td>
+                                                        >{this.props.myBoard[row_i][cell_i]}</td>
                                                     )
                                                 })
                                             }
