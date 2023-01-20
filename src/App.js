@@ -55,7 +55,7 @@ class App extends Component
 		}
 
 		data.shipLogicPosition.forEach(element => {
-			stateUpdate.myBoard[element[1]][element[0]] = shipToDraw;
+			stateUpdate.myBoard[element[0]][element[1]] = shipToDraw;
 			stateUpdate.playerPositions.push(element.join());
 		});
 		stateUpdate.message = "";

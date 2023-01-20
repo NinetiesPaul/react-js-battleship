@@ -142,7 +142,7 @@ class Board extends Component {
                                                         py={row_i}
                                                         key={cell_i}
                                                         onClick={this.handleClickCell.bind(this)}
-                                                        >{this.props.myBoard[row_i][cell_i]}</td>
+                                                        >{this.props.myBoard[cell_i][row_i]}</td>
                                                     )
                                                 })
                                             }
