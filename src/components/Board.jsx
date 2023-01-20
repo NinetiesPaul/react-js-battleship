@@ -36,8 +36,6 @@ class Board extends Component {
                     var pX = (this.currentSelectedShipOrientation === "leftToRight") ? posX + i : posX;
                     var pY = (this.currentSelectedShipOrientation === "topToBottom") ? posY + i : posY;
 
-
-
                     if (this.props.playerPositions.includes([pX, pY].join())){
                         this.props.setMessage("Invalid position!");
                         return false;
@@ -47,9 +45,7 @@ class Board extends Component {
 
                 const data = {
                     shipSize: this.currentSelectedShip,
-                    shipVisualPosition: event.target.id,
                     shipLogicPosition: positionsToDraw,
-                    shipOrientation: this.currentSelectedShipOrientation
                 };
 
                 this.props.cellInteraction(data)
@@ -58,8 +54,6 @@ class Board extends Component {
             }
         }
     }
-
-    
 
     handleClickShipSelectionButton(size)
     {
@@ -79,7 +73,22 @@ class Board extends Component {
     {
         if (this.gameStage === 1) {
             this.gameStage += 1;
+
+            [['D', 1], ['S', 2], ['Cr', 3], ['B', 4], ['Ca', 5]].forEach(element => {
+                const data = {
+                    shipLabel: element[0],
+                    shipSize: element[1],
+                    shipLogicPosition: [ [ Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)]  ],
+                };
+                
+                this.props.setEnemyShip(data)
+            });
         }
+    }
+
+    handleBoardChange()
+    {
+        this.props.changeCurrentBoard();
     }
 
     render()
@@ -142,7 +151,7 @@ class Board extends Component {
                                                         py={row_i}
                                                         key={cell_i}
                                                         onClick={this.handleClickCell.bind(this)}
-                                                        >{this.props.myBoard[cell_i][row_i]}</td>
+                                                        >{this.props.currentBoard[cell_i][row_i]}</td>
                                                     )
                                                 })
                                             }
@@ -159,6 +168,10 @@ class Board extends Component {
 
                 <span>
                     <Button onClick={() => this.handleStartGame(1)}>Start Game</Button>
+                </span>
+
+                <span>
+                    <Button onClick={() => this.handleBoardChange()}>Change Board</Button><br/>{this.props.currenlyShowing}
                 </span>
             </Container>
         )

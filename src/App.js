@@ -17,9 +17,12 @@ class App extends Component
 				isBattleshipSet: false,
 				isCarrierSet: false,
 			},
+			currentBoard: "player",
 			playerPositions: [],
+			enemyPositions: [],
 			message: "",
-			myBoard: [["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""]]
+			playerBoard: [["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""]],
+			enemyBoard: [["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""]]
 		}
 	}
 
@@ -55,10 +58,22 @@ class App extends Component
 		}
 
 		data.shipLogicPosition.forEach(element => {
-			stateUpdate.myBoard[element[0]][element[1]] = shipToDraw;
+			stateUpdate.playerBoard[element[0]][element[1]] = shipToDraw;
 			stateUpdate.playerPositions.push(element.join());
 		});
 		stateUpdate.message = "";
+
+		this.setState(stateUpdate);
+	}
+
+	setEnemyShip(data)
+	{
+		const stateUpdate = this.state;
+
+		data.shipLogicPosition.forEach(element => {
+			stateUpdate.enemyBoard[element[0]][element[1]] = data.shipLabel;
+			stateUpdate.enemyPositions.push(element.join());
+		});
 
 		this.setState(stateUpdate);
 	}
@@ -68,15 +83,26 @@ class App extends Component
 		this.setState({message: msg});
 	}
 
+	changeCurrentBoard()
+	{
+		var changeToBoard = (this.state.currentBoard === "player") ? "enemy" : "player";
+		this.setState({currentBoard: changeToBoard});
+	}
+
 	render()
 	{
+		const boardToShow = (this.state.currentBoard === "player") ? this.state.playerBoard : this.state.enemyBoard;
+
 		return(
 			<section>
 				<Board
 				message={this.state.message}
 				shipButtonsStatus={this.state.shipButtonsStatus}
-				myBoard={this.state.myBoard}
 				playerPositions={this.state.playerPositions}
+				currentBoard={boardToShow}
+				currenlyShowing={this.state.currentBoard}
+				setEnemyShip={this.setEnemyShip.bind(this)}
+				changeCurrentBoard={this.changeCurrentBoard.bind(this)}
 				cellInteraction={this.cellInteraction.bind(this)}
 				setMessage={this.setMessage.bind(this)}/>
 			</section>
