@@ -22,11 +22,50 @@ class App extends Component
 			enemyPositions: [],
 			message: "",
 			playerBoard: [["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""]],
-			enemyBoard: [["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""]]
+			enemyBoard: [["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""]],
+			allowableEnemyX: this._allowableEnemyX(),
+			allowableEnemyY: this._allowableEnemyY()
 		}
 	}
 
-	cellInteraction(data)
+	_allowableEnemyX()
+	{
+		var allowableX = [];
+		
+		Array(10).fill("").map((k,row_i) => {
+			Array(10-5).fill("").map((k,row_k) => {
+				var horizontal = [];
+				for (var i = 0; i < 5; i++) {
+				horizontal.push([row_k + i, row_i]);
+				}
+
+				allowableX.push(horizontal);
+			});
+		});
+
+		return allowableX;
+
+	}
+
+	_allowableEnemyY()
+	{
+		var allowableY = [];
+
+		Array(10-5).fill("").map((k,row_i) => {
+			Array(10).fill("").map((k,row_k) => {
+			  var vertical = [];
+			  for (var i = 0; i < 5; i++) {
+				vertical.push([row_k, row_i + i]);
+			  }
+			  
+			  allowableY.push(vertical);
+			});
+		  });
+
+		  return allowableY;
+	}
+
+	setPlayerShip(data)
 	{
 		const stateUpdate = this.state;
 
@@ -66,13 +105,15 @@ class App extends Component
 		this.setState(stateUpdate);
 	}
 
-	setEnemyShip(data)
+	setEnemyShips(data)
 	{
 		const stateUpdate = this.state;
 
-		data.shipLogicPosition.forEach(element => {
-			stateUpdate.enemyBoard[element[0]][element[1]] = data.shipLabel;
-			stateUpdate.enemyPositions.push(element.join());
+		data.forEach(enemyShip => {
+			enemyShip.shipLogicPosition.forEach(coordinate => {
+				stateUpdate.enemyBoard[coordinate[0]][coordinate[1]] = enemyShip.shipLabel;
+				stateUpdate.enemyPositions.push(coordinate.join());
+			});
 		});
 
 		this.setState(stateUpdate);
@@ -101,9 +142,11 @@ class App extends Component
 				playerPositions={this.state.playerPositions}
 				currentBoard={boardToShow}
 				currenlyShowing={this.state.currentBoard}
-				setEnemyShip={this.setEnemyShip.bind(this)}
+				allowableEnemyX={this.state.allowableEnemyX}
+				allowableEnemyY={this.state.allowableEnemyY}
+				setEnemyShips={this.setEnemyShips.bind(this)}
 				changeCurrentBoard={this.changeCurrentBoard.bind(this)}
-				cellInteraction={this.cellInteraction.bind(this)}
+				setPlayerShip={this.setPlayerShip.bind(this)}
 				setMessage={this.setMessage.bind(this)}/>
 			</section>
 		)

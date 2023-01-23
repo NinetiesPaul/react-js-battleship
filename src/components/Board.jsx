@@ -48,7 +48,7 @@ class Board extends Component {
                     shipLogicPosition: positionsToDraw,
                 };
 
-                this.props.cellInteraction(data)
+                this.props.setPlayerShip(data)
 
                 this.currentSelectedShip = "";
             }
@@ -74,15 +74,52 @@ class Board extends Component {
         if (this.gameStage === 1) {
             this.gameStage += 1;
 
-            [['D', 1], ['S', 2], ['Cr', 3], ['B', 4], ['Ca', 5]].forEach(element => {
-                const data = {
+            var allowableEnemyX = this.props.allowableEnemyX;
+            var allowableEnemyY = this.props.allowableEnemyY;
+            var enemyShipsToDraw = [];
+
+            [['Ca', 5], ['B', 4], ['Cr', 3], ['S', 2], ['D', 1]].forEach(element => {
+                var shipDirection = [ 'leftToRight', 'topToBottom' ][Math.floor(Math.random() * 2)];
+
+                var enemyPositionsToDraw = [];
+
+                if (shipDirection === 'leftToRight') {
+                    enemyPositionsToDraw = allowableEnemyX.splice(Math.floor(Math.random() * allowableEnemyX.length), 1)[0];
+                    enemyPositionsToDraw.splice(enemyPositionsToDraw.length - (5 - element[1]));
+    
+                    enemyPositionsToDraw.forEach(coordinate => {
+                        allowableEnemyX.forEach((allowableCoord, i) => {
+                            if (allowableCoord.join().includes(coordinate.join())){
+                                allowableEnemyX.splice(i, 1);
+                            }
+                            
+                        })
+                    });
+
+                } else {
+                    enemyPositionsToDraw = allowableEnemyY.splice(Math.floor(Math.random() * allowableEnemyY.length), 1)[0];
+                    enemyPositionsToDraw.splice(enemyPositionsToDraw.length - (5 - element[1]));
+    
+                    enemyPositionsToDraw.forEach(coordinate => {
+                        allowableEnemyY.forEach((allowableCoord, i) => {
+                            if (allowableCoord.join().includes(coordinate.join())){
+                                allowableEnemyY.splice(i, 1);
+                            }
+                            
+                        })
+                    });
+
+                }
+
+                var data = {
                     shipLabel: element[0],
-                    shipSize: element[1],
-                    shipLogicPosition: [ [ Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)]  ],
+                    shipLogicPosition: enemyPositionsToDraw,
                 };
-                
-                this.props.setEnemyShip(data)
+
+                enemyShipsToDraw.push(data);
             });
+                
+            this.props.setEnemyShips(enemyShipsToDraw);
         }
     }
 
