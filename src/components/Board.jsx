@@ -82,7 +82,6 @@ class Board extends Component {
                 var shipDirection = [ 'leftToRight', 'topToBottom' ][Math.floor(Math.random() * 2)];
 
                 var enemyPositionsToDraw = [];
-
                 if (shipDirection === 'leftToRight') {
                     enemyPositionsToDraw = allowableEnemyX.splice(Math.floor(Math.random() * allowableEnemyX.length), 1)[0];
                     enemyPositionsToDraw.splice(enemyPositionsToDraw.length - (5 - element[1]));
@@ -95,7 +94,6 @@ class Board extends Component {
                             
                         })
                     });
-
                 } else {
                     enemyPositionsToDraw = allowableEnemyY.splice(Math.floor(Math.random() * allowableEnemyY.length), 1)[0];
                     enemyPositionsToDraw.splice(enemyPositionsToDraw.length - (5 - element[1]));
@@ -108,7 +106,6 @@ class Board extends Component {
                             
                         })
                     });
-
                 }
 
                 var data = {

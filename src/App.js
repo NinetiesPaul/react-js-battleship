@@ -44,7 +44,6 @@ class App extends Component
 		});
 
 		return allowableX;
-
 	}
 
 	_allowableEnemyY()
