@@ -18,13 +18,15 @@ class App extends Component
 				isCarrierSet: false,
 			},
 			currentBoard: "player",
+			playerShipsSet: true,
 			playerPositions: [],
 			enemyPositions: [],
 			message: "",
 			playerBoard: [["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""]],
 			enemyBoard: [["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""]],
 			allowableEnemyX: this._allowableEnemyX(),
-			allowableEnemyY: this._allowableEnemyY()
+			allowableEnemyY: this._allowableEnemyY(),
+			currentTurn: "player"
 		}
 	}
 
@@ -101,6 +103,10 @@ class App extends Component
 		});
 		stateUpdate.message = "";
 
+		if (stateUpdate.playerPositions.length === 15) {
+			stateUpdate.playerShipsSet = false;
+		}
+
 		this.setState(stateUpdate);
 	}
 
@@ -143,6 +149,8 @@ class App extends Component
 				currenlyShowing={this.state.currentBoard}
 				allowableEnemyX={this.state.allowableEnemyX}
 				allowableEnemyY={this.state.allowableEnemyY}
+				isPlayerShipsSet={this.state.playerShipsSet}
+				currentTurn={this.state.currentTurn}
 				setEnemyShips={this.setEnemyShips.bind(this)}
 				changeCurrentBoard={this.changeCurrentBoard.bind(this)}
 				setPlayerShip={this.setPlayerShip.bind(this)}

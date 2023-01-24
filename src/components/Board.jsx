@@ -1,7 +1,7 @@
 import { React } from "react";
 import { Component } from 'react';
 import { Container } from '@mui/material';
-import { Button } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 
 class Board extends Component {
 
@@ -52,6 +52,13 @@ class Board extends Component {
 
                 this.currentSelectedShip = "";
             }
+        }
+
+        if (this.gameStage === 2) {
+            var posX = parseInt(event.target.getAttribute("px"));
+            var posY = parseInt(event.target.getAttribute("py"));
+
+            //TODO: handle firing logic
         }
     }
 
@@ -185,12 +192,15 @@ class Board extends Component {
                 </span>
 
                 <span>
-                    <Button onClick={() => this.handleStartGame(1)}>Start Game</Button>
+                    <Button onClick={() => this.handleStartGame(1)} disabled={this.props.isPlayerShipsSet}>Start Game</Button>
                 </span>
 
                 <span>
-                    <Button onClick={() => this.handleBoardChange()}>Change Board</Button><br/>{this.props.currenlyShowing}
+                    <Button onClick={() => this.handleBoardChange()}>Change Board</Button><br/>
                 </span>
+
+                <Typography><b>Current turn: </b>{this.props.currentTurn}</Typography>
+                <Typography><b>Showing: </b>{this.props.currenlyShowing} board</Typography>
             </Container>
         )
     }
