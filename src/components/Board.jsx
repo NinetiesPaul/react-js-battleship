@@ -74,39 +74,23 @@ class Board extends Component {
         if (this.gameStage === 1) {
             this.gameStage += 1;
 
-            var allowableEnemyX = this.props.allowableEnemyX;
-            var allowableEnemyY = this.props.allowableEnemyY;
+            var allAllowableEnemyPositions = this.props.allowableEnemyX.concat(this.props.allowableEnemyY);
             var enemyShipsToDraw = [];
 
             [['Ca', 5], ['B', 4], ['Cr', 3], ['S', 2], ['D', 1]].forEach(element => {
-                var shipDirection = [ 'leftToRight', 'topToBottom' ][Math.floor(Math.random() * 2)];
 
                 var enemyPositionsToDraw = [];
-                if (shipDirection === 'leftToRight') {
-                    enemyPositionsToDraw = allowableEnemyX.splice(Math.floor(Math.random() * allowableEnemyX.length), 1)[0];
-                    enemyPositionsToDraw.splice(enemyPositionsToDraw.length - (5 - element[1]));
-    
-                    enemyPositionsToDraw.forEach(coordinate => {
-                        allowableEnemyX.forEach((allowableCoord, i) => {
-                            if (allowableCoord.join().includes(coordinate.join())){
-                                allowableEnemyX.splice(i, 1);
-                            }
-                            
-                        })
-                    });
-                } else {
-                    enemyPositionsToDraw = allowableEnemyY.splice(Math.floor(Math.random() * allowableEnemyY.length), 1)[0];
-                    enemyPositionsToDraw.splice(enemyPositionsToDraw.length - (5 - element[1]));
-    
-                    enemyPositionsToDraw.forEach(coordinate => {
-                        allowableEnemyY.forEach((allowableCoord, i) => {
-                            if (allowableCoord.join().includes(coordinate.join())){
-                                allowableEnemyY.splice(i, 1);
-                            }
-                            
-                        })
-                    });
-                }
+                enemyPositionsToDraw = allAllowableEnemyPositions.splice(Math.floor(Math.random() * allAllowableEnemyPositions.length), 1)[0];
+
+                enemyPositionsToDraw.forEach(coordinate => {
+                    allAllowableEnemyPositions.forEach((allowableCoord, i) => {
+                        if (allowableCoord.join().includes(coordinate.join())){
+                            allAllowableEnemyPositions.splice(i, 1);
+                        }
+                    })
+                });
+
+                enemyPositionsToDraw.splice(enemyPositionsToDraw.length - (5 - element[1]));
 
                 var data = {
                     shipLabel: element[0],
