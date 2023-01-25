@@ -58,7 +58,9 @@ class Board extends Component {
             var posX = parseInt(event.target.getAttribute("px"));
             var posY = parseInt(event.target.getAttribute("py"));
 
-            //TODO: handle firing logic
+            if (event.target.innerText === "") {
+                this.props.openFire([posX, posY].join())
+            }
         }
     }
 

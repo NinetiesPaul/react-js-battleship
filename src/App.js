@@ -68,7 +68,7 @@ class App extends Component
 
 	setPlayerShip(data)
 	{
-		const stateUpdate = this.state;
+		var stateUpdate = this.state;
 
 		let shipToDraw = "";
 		
@@ -112,14 +112,38 @@ class App extends Component
 
 	setEnemyShips(data)
 	{
-		const stateUpdate = this.state;
+		var stateUpdate = this.state;
 
 		data.forEach(enemyShip => {
 			enemyShip.shipLogicPosition.forEach(coordinate => {
-				stateUpdate.enemyBoard[coordinate[0]][coordinate[1]] = enemyShip.shipLabel;
+				stateUpdate.enemyBoard[coordinate[0]][coordinate[1]] = ""; //enemyShip.shipLabel;
 				stateUpdate.enemyPositions.push(coordinate.join());
 			});
 		});
+
+		this.setState(stateUpdate);
+	}
+
+	openFire(coordinate)
+	{
+		var stateUpdate = this.state;
+
+		if (stateUpdate.currentTurn == "player") {
+			var newCellLabel = "O";
+
+			var coordinateId = stateUpdate.enemyPositions.indexOf(coordinate);
+			if (coordinateId !== -1) {
+				stateUpdate.enemyPositions.splice(coordinateId, 1);
+				newCellLabel = "X";
+			}
+
+			coordinate = coordinate.split(",");
+			stateUpdate.enemyBoard[parseInt(coordinate[0])][parseInt(coordinate[1])] = newCellLabel;
+		} else {
+
+			// TODO: build cpu firing logic
+
+		}
 
 		this.setState(stateUpdate);
 	}
@@ -137,7 +161,7 @@ class App extends Component
 
 	render()
 	{
-		const boardToShow = (this.state.currentBoard === "player") ? this.state.playerBoard : this.state.enemyBoard;
+		var boardToShow = (this.state.currentBoard === "player") ? this.state.playerBoard : this.state.enemyBoard;
 
 		return(
 			<section>
@@ -145,12 +169,14 @@ class App extends Component
 				message={this.state.message}
 				shipButtonsStatus={this.state.shipButtonsStatus}
 				playerPositions={this.state.playerPositions}
+				enemyPositions={this.state.enemyPositions}
 				currentBoard={boardToShow}
 				currenlyShowing={this.state.currentBoard}
 				allowableEnemyX={this.state.allowableEnemyX}
 				allowableEnemyY={this.state.allowableEnemyY}
 				isPlayerShipsSet={this.state.playerShipsSet}
 				currentTurn={this.state.currentTurn}
+				openFire={this.openFire.bind(this)}
 				setEnemyShips={this.setEnemyShips.bind(this)}
 				changeCurrentBoard={this.changeCurrentBoard.bind(this)}
 				setPlayerShip={this.setPlayerShip.bind(this)}
