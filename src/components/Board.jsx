@@ -55,11 +55,12 @@ class Board extends Component {
         }
 
         if (this.gameStage === 2) {
-            var posX = parseInt(event.target.getAttribute("px"));
-            var posY = parseInt(event.target.getAttribute("py"));
-
-            if (event.target.innerText === "") {
-                this.props.openFire([posX, posY].join())
+            if (this.props.currentTurn === "player") {
+                if (event.target.innerText === "") {
+                    var posX = parseInt(event.target.getAttribute("px"));
+                    var posY = parseInt(event.target.getAttribute("py"));
+                    this.props.openFire({ coordinate: [posX, posY].join() })
+                }
             }
         }
     }
@@ -151,6 +152,10 @@ class Board extends Component {
                     <Button onClick={() => this.handleClickShipOrientationButton("topToBottom")}>Vertically</Button>
                 </span><br/>
 
+                <Typography id="messageBox">
+                    {this.props.message}
+                </Typography>
+
                 <table id="board">
                     <thead>
                         <tr>
@@ -177,6 +182,7 @@ class Board extends Component {
                                                         px={cell_i}
                                                         py={row_i}
                                                         key={cell_i}
+                                                        //shipHere={this.props.enemyPositions.indexOf([ cell_i, row_i ].join())}
                                                         onClick={this.handleClickCell.bind(this)}
                                                         >{this.props.currentBoard[cell_i][row_i]}</td>
                                                     )
@@ -188,10 +194,6 @@ class Board extends Component {
                             }
                     </tbody>
                 </table>
-
-                <span>
-                    {this.props.message}
-                </span>
 
                 <span>
                     <Button onClick={() => this.handleStartGame(1)} disabled={this.props.isPlayerShipsSet}>Start Game</Button>

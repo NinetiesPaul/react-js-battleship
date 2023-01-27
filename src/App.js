@@ -44,7 +44,7 @@ class App extends Component
 				allowableX.push(horizontal);
 			});
 		});
-
+		
 		return allowableX;
 	}
 
@@ -124,28 +124,57 @@ class App extends Component
 		this.setState(stateUpdate);
 	}
 
-	openFire(coordinate)
+	openFire(data)
 	{
 		var stateUpdate = this.state;
+		var nextTurn = stateUpdate.currentTurn;
 
-		if (stateUpdate.currentTurn == "player") {
+		if (nextTurn === "player") {
 			var newCellLabel = "O";
 
-			var coordinateId = stateUpdate.enemyPositions.indexOf(coordinate);
+			var coordinateId = stateUpdate.enemyPositions.indexOf(data.coordinate);
 			if (coordinateId !== -1) {
 				stateUpdate.enemyPositions.splice(coordinateId, 1);
 				newCellLabel = "X";
+			} else {
+				nextTurn = "computer";
+				stateUpdate.currentBoard = "player";
 			}
 
-			coordinate = coordinate.split(",");
+			var coordinate = data.coordinate.split(",");
 			stateUpdate.enemyBoard[parseInt(coordinate[0])][parseInt(coordinate[1])] = newCellLabel;
 		} else {
+			var newCellLabel = "O";
 
-			// TODO: build cpu firing logic
+			var coordinateId = stateUpdate.playerPositions.indexOf(data.coordinate);
+			if (coordinateId !== -1) {
+				stateUpdate.playerPositions.splice(coordinateId, 1);
+				newCellLabel = "X";
+			} else {
+				nextTurn = "player";
+			}
 
+			var coordinate = data.coordinate.split(",");
+			stateUpdate.playerBoard[parseInt(coordinate[0])][parseInt(coordinate[1])] = newCellLabel;
 		}
 
-		this.setState(stateUpdate);
+		stateUpdate.currentTurn = nextTurn;
+
+		this.setState(stateUpdate, () => {
+			if (nextTurn === "computer") {
+				this.setMessage("Missed! Enemy turn!")
+				setTimeout(() => {
+					this.computerOpenFire();
+				}, 3000);
+			}
+		});
+	}
+
+	computerOpenFire()
+	{
+		var enemyFireAt = [ Math.floor(Math.random() * 10), Math.floor(Math.random() * 10) ].join();
+		this.setMessage("Enemy firing at " + enemyFireAt);
+		this.openFire({ coordinate: enemyFireAt });
 	}
 
 	setMessage(msg)
