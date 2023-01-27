@@ -22,15 +22,14 @@ class App extends Component
 			playerPositions: [],
 			enemyPositions: [],
 			message: "",
-			playerBoard: [["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""]],
-			enemyBoard: [["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""]],
-			allowableEnemyX: this._allowableEnemyX(),
-			allowableEnemyY: this._allowableEnemyY(),
+			playerBoard: this._createEmptyBoard(),
+			enemyBoard: this._createEmptyBoard(),
+			allowableEnemyPositions: this._createAllowableEnemyPositions(),
 			currentTurn: "player"
 		}
 	}
 
-	_allowableEnemyX()
+	_createAllowableEnemyPositions()
 	{
 		var allowableX = [];
 		
@@ -44,12 +43,7 @@ class App extends Component
 				allowableX.push(horizontal);
 			});
 		});
-		
-		return allowableX;
-	}
 
-	_allowableEnemyY()
-	{
 		var allowableY = [];
 
 		Array(10-5).fill("").map((k,row_i) => {
@@ -62,8 +56,13 @@ class App extends Component
 			  allowableY.push(vertical);
 			});
 		  });
+		
+		return allowableX.concat(allowableY);
+	}
 
-		  return allowableY;
+	_createEmptyBoard()
+	{
+		return [["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""],["","","","","","","","","",""]];
 	}
 
 	setPlayerShip(data)
@@ -198,11 +197,10 @@ class App extends Component
 				message={this.state.message}
 				shipButtonsStatus={this.state.shipButtonsStatus}
 				playerPositions={this.state.playerPositions}
-				enemyPositions={this.state.enemyPositions}
+				//enemyPositions={this.state.enemyPositions}
 				currentBoard={boardToShow}
 				currenlyShowing={this.state.currentBoard}
-				allowableEnemyX={this.state.allowableEnemyX}
-				allowableEnemyY={this.state.allowableEnemyY}
+				allowableEnemyPositions={this.state.allowableEnemyPositions}
 				isPlayerShipsSet={this.state.playerShipsSet}
 				currentTurn={this.state.currentTurn}
 				openFire={this.openFire.bind(this)}

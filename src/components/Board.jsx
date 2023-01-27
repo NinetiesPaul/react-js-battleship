@@ -84,7 +84,7 @@ class Board extends Component {
         if (this.gameStage === 1) {
             this.gameStage += 1;
 
-            var allAllowableEnemyPositions = this.props.allowableEnemyX.concat(this.props.allowableEnemyY);
+            var allAllowableEnemyPositions = this.props.allowableEnemyPositions;
             var enemyShipsToDraw = [];
 
             [['Ca', 5], ['B', 4], ['Cr', 3], ['S', 2], ['D', 1]].forEach(element => {
@@ -125,36 +125,33 @@ class Board extends Component {
 
         return (
             <Container component="article" maxWidth="sm">
-                <span id="shipSizeSelection">
-                    <Button
-                    onClick={() => this.handleClickShipSelectionButton(1)}
-                    disabled={this.props.shipButtonsStatus.isDestroyerSet}>Destroyer</Button>
+                <Button
+                onClick={() => this.handleClickShipSelectionButton(1)}
+                disabled={this.props.shipButtonsStatus.isDestroyerSet}>Destroyer</Button>
 
-                    <Button
-                    onClick={() => this.handleClickShipSelectionButton(2)}
-                    disabled={this.props.shipButtonsStatus.isSubmarineSet}>Submarine</Button>
+                <Button
+                onClick={() => this.handleClickShipSelectionButton(2)}
+                disabled={this.props.shipButtonsStatus.isSubmarineSet}>Submarine</Button>
 
-                    <Button
-                    onClick={() => this.handleClickShipSelectionButton(3)}
-                    disabled={this.props.shipButtonsStatus.isCruiserSet}>Cruiser</Button>
+                <Button
+                onClick={() => this.handleClickShipSelectionButton(3)}
+                disabled={this.props.shipButtonsStatus.isCruiserSet}>Cruiser</Button>
 
-                    <Button
-                    onClick={() => this.handleClickShipSelectionButton(4)}
-                    disabled={this.props.shipButtonsStatus.isBattleshipSet}>Battleship</Button>
+                <Button
+                onClick={() => this.handleClickShipSelectionButton(4)}
+                disabled={this.props.shipButtonsStatus.isBattleshipSet}>Battleship</Button>
 
-                    <Button
-                    onClick={() => this.handleClickShipSelectionButton(5)}
-                    disabled={this.props.shipButtonsStatus.isCarrierSet}>Carrier</Button>
-                </span><br/>
+                <Button
+                onClick={() => this.handleClickShipSelectionButton(5)}
+                disabled={this.props.shipButtonsStatus.isCarrierSet}>Carrier</Button>
 
-                <span id="shipOrientationSelection">
-                    <Button onClick={() => this.handleClickShipOrientationButton("leftToRight")}>Horizontally</Button>
-                    <Button onClick={() => this.handleClickShipOrientationButton("topToBottom")}>Vertically</Button>
-                </span><br/>
+                <Button onClick={() => this.handleClickShipOrientationButton("leftToRight")}>Horizontally</Button>
+                <Button onClick={() => this.handleClickShipOrientationButton("topToBottom")}>Vertically</Button>
 
-                <Typography id="messageBox">
-                    {this.props.message}
-                </Typography>
+                <Typography id="messageBox">{this.props.message}</Typography>
+
+                <Typography><b>Current turn: </b>{this.props.currentTurn}</Typography>
+                <Typography><b>Showing: </b>{this.props.currenlyShowing} board</Typography>
 
                 <table id="board">
                     <thead>
@@ -195,16 +192,8 @@ class Board extends Component {
                     </tbody>
                 </table>
 
-                <span>
-                    <Button onClick={() => this.handleStartGame(1)} disabled={this.props.isPlayerShipsSet}>Start Game</Button>
-                </span>
-
-                <span>
-                    <Button onClick={() => this.handleBoardChange()}>Change Board</Button><br/>
-                </span>
-
-                <Typography><b>Current turn: </b>{this.props.currentTurn}</Typography>
-                <Typography><b>Showing: </b>{this.props.currenlyShowing} board</Typography>
+                <Button onClick={() => this.handleStartGame()} disabled={this.props.isPlayerShipsSet}>Start Game</Button>
+                <Button onClick={() => this.handleBoardChange()}>Change Board</Button><br/>
             </Container>
         )
     }
