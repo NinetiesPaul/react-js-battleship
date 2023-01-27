@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#messageBox {
+  min-height: 1.5em;
+  margin-bottom: 0.5em;
+}
