@@ -127,6 +127,7 @@ class App extends Component
 	{
 		var stateUpdate = this.state;
 		var nextTurn = stateUpdate.currentTurn;
+		var msg = "";
 
 		if (nextTurn === "player") {
 			var newCellLabel = "O";
@@ -135,9 +136,11 @@ class App extends Component
 			if (coordinateId !== -1) {
 				stateUpdate.enemyPositions.splice(coordinateId, 1);
 				newCellLabel = "X";
+				msg = "It's a hit! Fire again!"
 			} else {
 				nextTurn = "computer";
 				stateUpdate.currentBoard = "player";
+				msg = "Missed! Enemy turn!"
 			}
 
 			var coordinate = data.coordinate.split(",");
@@ -149,8 +152,10 @@ class App extends Component
 			if (coordinateId !== -1) {
 				stateUpdate.playerPositions.splice(coordinateId, 1);
 				newCellLabel = "X";
+				msg = "It's a hit! Enemy is firing again!"
 			} else {
 				nextTurn = "player";
+				msg = "Missed! Back to player!"
 			}
 
 			var coordinate = data.coordinate.split(",");
@@ -158,22 +163,16 @@ class App extends Component
 		}
 
 		stateUpdate.currentTurn = nextTurn;
+		stateUpdate.message = msg;
 
 		this.setState(stateUpdate, () => {
 			if (nextTurn === "computer") {
-				this.setMessage("Missed! Enemy turn!")
 				setTimeout(() => {
-					this.computerOpenFire();
+					var enemyFireAt = [ Math.floor(Math.random() * 10), Math.floor(Math.random() * 10) ].join();
+					this.openFire({ coordinate: enemyFireAt }, "cuzim");
 				}, 3000);
 			}
 		});
-	}
-
-	computerOpenFire()
-	{
-		var enemyFireAt = [ Math.floor(Math.random() * 10), Math.floor(Math.random() * 10) ].join();
-		this.setMessage("Enemy firing at " + enemyFireAt);
-		this.openFire({ coordinate: enemyFireAt });
 	}
 
 	setMessage(msg)
