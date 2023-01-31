@@ -17,12 +17,11 @@ class Board extends Component {
 
     handleClickCell(event)
     {
+        var posX = parseInt(event.target.getAttribute("px"));
+        var posY = parseInt(event.target.getAttribute("py"));
+
         if (this.gameStage === 1) {
             if (this.currentSelectedShip !== "" && this.currentSelectedShipOrientation !== "") {
-
-                var posX = parseInt(event.target.getAttribute("px"));
-                var posY = parseInt(event.target.getAttribute("py"));
-
                 
                 if (this.currentSelectedShip > 1 && 
                     ((this.currentSelectedShipOrientation === "leftToRight" && (posX + this.currentSelectedShip) > 10) ||
@@ -57,8 +56,6 @@ class Board extends Component {
         if (this.gameStage === 2) {
             if (this.props.currentTurn === "player" && this.props.currenlyShowing === "enemy") {
                 if (event.target.innerText === "") {
-                    var posX = parseInt(event.target.getAttribute("px"));
-                    var posY = parseInt(event.target.getAttribute("py"));
                     this.props.openFire({ coordinate: [posX, posY].join() })
                 }
             }
@@ -179,7 +176,7 @@ class Board extends Component {
                                                         px={cell_i}
                                                         py={row_i}
                                                         key={cell_i}
-                                                        //shipHere={this.props.enemyPositions.indexOf([ cell_i, row_i ].join())}
+                                                        ship={this.props.enemyVisualBoard[ cell_i][row_i ]} //debug
                                                         onClick={this.handleClickCell.bind(this)}
                                                         >{this.props.currentBoard[cell_i][row_i]}</td>
                                                     )

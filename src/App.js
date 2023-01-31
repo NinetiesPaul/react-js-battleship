@@ -24,6 +24,7 @@ class App extends Component
 			message: "",
 			playerBoard: this._createEmptyBoard(),
 			enemyBoard: this._createEmptyBoard(),
+			enemyVisualBoard: this._createEmptyBoard(), //debug
 			allowableEnemyPositions: this._createAllowableEnemyPositions(),
 			currentTurn: "player"
 		}
@@ -116,6 +117,7 @@ class App extends Component
 		data.forEach(enemyShip => {
 			enemyShip.shipLogicPosition.forEach(coordinate => {
 				stateUpdate.enemyBoard[coordinate[0]][coordinate[1]] = ""; //enemyShip.shipLabel;
+				stateUpdate.enemyVisualBoard[coordinate[0]][coordinate[1]] = enemyShip.shipLabel; 
 				stateUpdate.enemyPositions.push(coordinate.join());
 			});
 		});
@@ -128,27 +130,30 @@ class App extends Component
 		var stateUpdate = this.state;
 		var nextTurn = stateUpdate.currentTurn;
 		var msg = "";
+		var newCellLabel = "O";
+		var coordinateId = -1;
+		var coordinate = data.coordinate;
 
 		if (nextTurn === "player") {
-			var newCellLabel = "O";
+			newCellLabel = "O";
 
-			var coordinateId = stateUpdate.enemyPositions.indexOf(data.coordinate);
+			coordinateId = stateUpdate.enemyPositions.indexOf(coordinate);
 			if (coordinateId !== -1) {
 				stateUpdate.enemyPositions.splice(coordinateId, 1);
 				newCellLabel = "X";
 				msg = "It's a hit! Fire again!"
 			} else {
-				nextTurn = "computer";
+				nextTurn = "enemy";
 				stateUpdate.currentBoard = "player";
 				msg = "Missed! Enemy turn!"
 			}
 
-			var coordinate = data.coordinate.split(",");
+			coordinate = coordinate.split(",");
 			stateUpdate.enemyBoard[parseInt(coordinate[0])][parseInt(coordinate[1])] = newCellLabel;
 		} else {
-			var newCellLabel = "O";
+			newCellLabel = "O";
 
-			var coordinateId = stateUpdate.playerPositions.indexOf(data.coordinate);
+			coordinateId = stateUpdate.playerPositions.indexOf(coordinate);
 			if (coordinateId !== -1) {
 				stateUpdate.playerPositions.splice(coordinateId, 1);
 				newCellLabel = "X";
@@ -158,7 +163,7 @@ class App extends Component
 				msg = "Missed! Back to player!"
 			}
 
-			var coordinate = data.coordinate.split(",");
+			coordinate = coordinate.split(",");
 			stateUpdate.playerBoard[parseInt(coordinate[0])][parseInt(coordinate[1])] = newCellLabel;
 		}
 
@@ -166,13 +171,15 @@ class App extends Component
 		stateUpdate.message = msg;
 
 		this.setState(stateUpdate, () => {
-			if (nextTurn === "computer") {
+			if (nextTurn === "enemy") {
 				setTimeout(() => {
 					var enemyFireAt = [ Math.floor(Math.random() * 10), Math.floor(Math.random() * 10) ].join();
-					this.openFire({ coordinate: enemyFireAt }, "cuzim");
+					this.openFire({ coordinate: enemyFireAt });
 				}, 3000);
 			}
 		});
+
+		console.log(this.state.enemyPositions.length)
 	}
 
 	setMessage(msg)
@@ -198,6 +205,7 @@ class App extends Component
 				playerPositions={this.state.playerPositions}
 				//enemyPositions={this.state.enemyPositions}
 				currentBoard={boardToShow}
+				enemyVisualBoard={this.state.enemyVisualBoard} //debug
 				currenlyShowing={this.state.currentBoard}
 				allowableEnemyPositions={this.state.allowableEnemyPositions}
 				isPlayerShipsSet={this.state.playerShipsSet}
