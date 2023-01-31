@@ -55,7 +55,7 @@ class Board extends Component {
         }
 
         if (this.gameStage === 2) {
-            if (this.props.currentTurn === "player") {
+            if (this.props.currentTurn === "player" && this.props.currenlyShowing === "enemy") {
                 if (event.target.innerText === "") {
                     var posX = parseInt(event.target.getAttribute("px"));
                     var posY = parseInt(event.target.getAttribute("py"));
