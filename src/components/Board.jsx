@@ -190,7 +190,7 @@ class Board extends Component {
                 </table>
 
                 <Button onClick={() => this.handleStartGame()} disabled={this.props.isPlayerShipsSet}>Start Game</Button>
-                <Button onClick={() => this.handleBoardChange()}>Change Board</Button><br/>
+                <Button onClick={() => this.handleBoardChange()} disabled={this.props.isPlayerShipsSet}>Change Board</Button><br/>
             </Container>
         )
     }

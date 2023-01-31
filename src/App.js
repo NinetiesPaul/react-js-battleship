@@ -35,7 +35,7 @@ class App extends Component
 		var allowableX = [];
 		
 		Array(10).fill("").map((k,row_i) => {
-			Array(10-5).fill("").map((k,row_k) => {
+			Array(6).fill("").map((k,row_k) => {
 				var horizontal = [];
 				for (var i = 0; i < 5; i++) {
 				horizontal.push([row_k + i, row_i]);
@@ -47,7 +47,7 @@ class App extends Component
 
 		var allowableY = [];
 
-		Array(10-5).fill("").map((k,row_i) => {
+		Array(6).fill("").map((k,row_i) => {
 			Array(10).fill("").map((k,row_k) => {
 			  var vertical = [];
 			  for (var i = 0; i < 5; i++) {
