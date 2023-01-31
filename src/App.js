@@ -135,8 +135,6 @@ class App extends Component
 		var coordinate = data.coordinate;
 
 		if (nextTurn === "player") {
-			newCellLabel = "O";
-
 			coordinateId = stateUpdate.enemyPositions.indexOf(coordinate);
 			if (coordinateId !== -1) {
 				stateUpdate.enemyPositions.splice(coordinateId, 1);
@@ -151,8 +149,6 @@ class App extends Component
 			coordinate = coordinate.split(",");
 			stateUpdate.enemyBoard[parseInt(coordinate[0])][parseInt(coordinate[1])] = newCellLabel;
 		} else {
-			newCellLabel = "O";
-
 			coordinateId = stateUpdate.playerPositions.indexOf(coordinate);
 			if (coordinateId !== -1) {
 				stateUpdate.playerPositions.splice(coordinateId, 1);
@@ -179,7 +175,7 @@ class App extends Component
 			}
 		});
 
-		console.log(this.state.enemyPositions.length)
+		console.log(this.state.enemyPositions.length) //debug
 	}
 
 	setMessage(msg)
