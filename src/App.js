@@ -42,7 +42,11 @@ class App extends Component
 				}
 
 				allowableX.push(horizontal);
+
+				return null;
 			});
+
+			return null;
 		});
 
 		var allowableY = [];
@@ -55,7 +59,11 @@ class App extends Component
 			  }
 			  
 			  allowableY.push(vertical);
+
+			  return null;
 			});
+
+			return null;
 		  });
 		
 		return allowableX.concat(allowableY);
