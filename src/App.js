@@ -124,7 +124,7 @@ class App extends Component
 		data.forEach(enemyShip => {
 			enemyShip.shipLogicPosition.forEach(coordinate => {
 				stateUpdate.enemyBoard[coordinate[0]][coordinate[1]] = ""; //enemyShip.shipLabel;
-				stateUpdate.enemyVisualBoard[coordinate[0]][coordinate[1]] = enemyShip.shipLabel; 
+				stateUpdate.enemyVisualBoard[coordinate[0]][coordinate[1]] = enemyShip.shipLabel; //debug
 				stateUpdate.enemyPositions.push(coordinate.join());
 			});
 		});
@@ -140,6 +140,7 @@ class App extends Component
 		var newCellLabel = "O";
 		var coordinateId = -1;
 		var coordinate = data.coordinate;
+		var enemyFollowUpShot = false;
 
 		if (nextTurn === "player") {
 			coordinateId = stateUpdate.enemyPositions.indexOf(coordinate);
@@ -161,6 +162,7 @@ class App extends Component
 				stateUpdate.playerPositions.splice(coordinateId, 1);
 				newCellLabel = "X";
 				msg = "The Enemy scored a hit! Enemy is firing again!"
+				enemyFollowUpShot = true;
 			} else {
 				nextTurn = "player";
 				msg = "The Enemy missed! Back to player!"
@@ -176,13 +178,53 @@ class App extends Component
 		this.setState(stateUpdate, () => {
 			if (nextTurn === "enemy") {
 				setTimeout(() => {
+
 					var enemyFireAt = [ Math.floor(Math.random() * 10), Math.floor(Math.random() * 10) ].join();
+
+					if (enemyFollowUpShot) {
+						var allDirections = [ 'up', 'down', 'left', 'right' ];
+
+						if (parseInt(coordinate[0]) === 0 || this.state.playerBoard[parseInt(coordinate[0]) - 1][parseInt(coordinate[1])] === "X" || this.state.playerBoard[parseInt(coordinate[0]) - 1][parseInt(coordinate[1])] === "O") {
+							allDirections.splice(allDirections.indexOf("left"), 1);
+							//console.log("cant go left")
+						}
+						if (parseInt(coordinate[0]) === 9 || this.state.playerBoard[parseInt(coordinate[0]) + 1][parseInt(coordinate[1])] === "X" || this.state.playerBoard[parseInt(coordinate[0]) + 1][parseInt(coordinate[1])] === "O") {
+							allDirections.splice(allDirections.indexOf("right"), 1);
+							//console.log("cant go right")
+						}
+						if (parseInt(coordinate[1]) === 0 || this.state.playerBoard[parseInt(coordinate[0])][parseInt(coordinate[1]) - 1] === "X" || this.state.playerBoard[parseInt(coordinate[0])][parseInt(coordinate[1]) - 1] === "O") {
+							allDirections.splice(allDirections.indexOf("up"), 1);
+							//console.log("cant go up")
+						}
+						if (parseInt(coordinate[1]) === 9 || this.state.playerBoard[parseInt(coordinate[0])][parseInt(coordinate[1]) + 1] === "X" || this.state.playerBoard[parseInt(coordinate[0])][parseInt(coordinate[1]) + 1] === "O") {
+							allDirections.splice(allDirections.indexOf("down"), 1);
+							//console.log("cant go down")
+						}
+
+						var pickDirection = allDirections[Math.floor(Math.random() * allDirections.length)];
+
+						if (pickDirection === "left") {
+							enemyFireAt = [ parseInt(coordinate[0]) - 1, parseInt(coordinate[1]) ].join();
+						}
+						if (pickDirection === "right") {
+							enemyFireAt = [ parseInt(coordinate[0]) + 1, parseInt(coordinate[1]) ].join();
+						}
+						if (pickDirection === "up") {
+							enemyFireAt = [ parseInt(coordinate[0]), parseInt(coordinate[1]) - 1 ].join();
+						}
+						if (pickDirection === "down") {
+							enemyFireAt = [ parseInt(coordinate[0]), parseInt(coordinate[1]) + 1 ].join();
+						}
+						
+						//console.log("follow up shot", pickDirection, allDirections, enemyFireAt);
+					}
+
 					this.openFire({ coordinate: enemyFireAt });
 				}, 3000);
 			}
 		});
 
-		console.log(this.state.enemyPositions.length) //debug
+		console.log(this.state.enemyPositions.length, this.state.playerPositions.length) //debug
 	}
 
 	setMessage(msg)
