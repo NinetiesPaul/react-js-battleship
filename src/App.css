@@ -8,3 +8,19 @@
   width: 2em;
   border-style: solid;
 }
+
+#box_options {
+  border-radius: 1em;
+  border-color: black;
+  border-width: 0.5em;
+  border-style: groove;
+  min-height: 11em;
+  position: relative;
+}
+
+#bottom_text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin-left: 2em;
+}

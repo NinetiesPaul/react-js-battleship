@@ -1,7 +1,6 @@
 import { React } from "react";
 import { Component } from 'react';
-import { Container } from '@mui/material';
-import { Button, Typography } from "@material-ui/core";
+import { Container, Button, Typography } from "@material-ui/core";
 
 class Board extends Component {
 
@@ -13,6 +12,7 @@ class Board extends Component {
 
         this.currentSelectedShip = "";
         this.currentSelectedShipOrientation = "";
+        this.hidePlayerShipButtons = false;
     }
 
     handleClickCell(event)
@@ -108,6 +108,9 @@ class Board extends Component {
             });
                 
             this.props.setEnemyShips(enemyShipsToDraw);
+
+            this.hidePlayerShipButtons = true;
+            this.props.setMessage("Game has started!");
         }
     }
 
@@ -122,33 +125,41 @@ class Board extends Component {
 
         return (
             <Container component="article" maxWidth="sm">
-                <Button
-                onClick={() => this.handleClickShipSelectionButton(1)}
-                disabled={this.props.shipButtonsStatus.isDestroyerSet}>Destroyer</Button>
 
-                <Button
-                onClick={() => this.handleClickShipSelectionButton(2)}
-                disabled={this.props.shipButtonsStatus.isSubmarineSet}>Submarine</Button>
+                <Container id="box_options">
+                    <section hidden={ this.hidePlayerShipButtons }>
+                        <Button
+                        onClick={() => this.handleClickShipSelectionButton(1)}
+                        disabled={this.props.shipButtonsStatus.isDestroyerSet}>Destroyer</Button>
 
-                <Button
-                onClick={() => this.handleClickShipSelectionButton(3)}
-                disabled={this.props.shipButtonsStatus.isCruiserSet}>Cruiser</Button>
+                        <Button
+                        onClick={() => this.handleClickShipSelectionButton(2)}
+                        disabled={this.props.shipButtonsStatus.isSubmarineSet}>Submarine</Button>
 
-                <Button
-                onClick={() => this.handleClickShipSelectionButton(4)}
-                disabled={this.props.shipButtonsStatus.isBattleshipSet}>Battleship</Button>
+                        <Button
+                        onClick={() => this.handleClickShipSelectionButton(3)}
+                        disabled={this.props.shipButtonsStatus.isCruiserSet}>Cruiser</Button>
 
-                <Button
-                onClick={() => this.handleClickShipSelectionButton(5)}
-                disabled={this.props.shipButtonsStatus.isCarrierSet}>Carrier</Button>
+                        <Button
+                        onClick={() => this.handleClickShipSelectionButton(4)}
+                        disabled={this.props.shipButtonsStatus.isBattleshipSet}>Battleship</Button>
 
-                <Button onClick={() => this.handleClickShipOrientationButton("leftToRight")}>Horizontally</Button>
-                <Button onClick={() => this.handleClickShipOrientationButton("topToBottom")}>Vertically</Button>
+                        <Button
+                        onClick={() => this.handleClickShipSelectionButton(5)}
+                        disabled={this.props.shipButtonsStatus.isCarrierSet}>Carrier</Button>
 
-                <Typography id="messageBox">{this.props.message}</Typography>
+                        <Button onClick={() => this.handleClickShipOrientationButton("leftToRight")}>Horizontally</Button>
+                        <Button onClick={() => this.handleClickShipOrientationButton("topToBottom")}>Vertically</Button>
+                    </section>
 
-                <Typography><b>Current turn: </b>{this.props.currentTurn}</Typography>
-                <Typography><b>Showing: </b>{this.props.currenlyShowing} board</Typography>
+                    <section id="bottom_text">
+                        <Typography><b>Current turn: </b>{this.props.currentTurn}</Typography>
+                        <Typography><b>Showing: </b>{this.props.currenlyShowing} board</Typography>
+                        <Typography><b>Last message:</b> {this.props.message}</Typography>
+                    </section>
+                </Container>
+
+                <br/>
 
                 <table id="board">
                     <thead>

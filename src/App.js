@@ -21,7 +21,7 @@ class App extends Component
 			playerShipsSet: true,
 			playerPositions: [],
 			enemyPositions: [],
-			message: "",
+			message: "Pick a ship and a orientation and set your ship positions, then hit \"Start\"!",
 			playerBoard: this._createEmptyBoard(),
 			enemyBoard: this._createEmptyBoard(),
 			enemyVisualBoard: this._createEmptyBoard(), //debug
@@ -109,7 +109,6 @@ class App extends Component
 			stateUpdate.playerBoard[element[0]][element[1]] = shipToDraw;
 			stateUpdate.playerPositions.push(element.join());
 		});
-		stateUpdate.message = "";
 
 		if (stateUpdate.playerPositions.length === 15) {
 			stateUpdate.playerShipsSet = false;
@@ -147,11 +146,11 @@ class App extends Component
 			if (coordinateId !== -1) {
 				stateUpdate.enemyPositions.splice(coordinateId, 1);
 				newCellLabel = "X";
-				msg = "It's a hit! Fire again!"
+				msg = "Player scored a hit! Fire again!"
 			} else {
 				nextTurn = "enemy";
 				stateUpdate.currentBoard = "player";
-				msg = "Missed! Enemy turn!"
+				msg = "You've missed! It's the Enemy turn!"
 			}
 
 			coordinate = coordinate.split(",");
@@ -161,10 +160,10 @@ class App extends Component
 			if (coordinateId !== -1) {
 				stateUpdate.playerPositions.splice(coordinateId, 1);
 				newCellLabel = "X";
-				msg = "It's a hit! Enemy is firing again!"
+				msg = "The Enemy scored a hit! Enemy is firing again!"
 			} else {
 				nextTurn = "player";
-				msg = "Missed! Back to player!"
+				msg = "The Enemy missed! Back to player!"
 			}
 
 			coordinate = coordinate.split(",");
