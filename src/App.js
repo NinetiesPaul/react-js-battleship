@@ -26,7 +26,8 @@ class App extends Component
 			enemyBoard: this._createEmptyBoard(),
 			enemyVisualBoard: this._createEmptyBoard(), //debug
 			allowableEnemyPositions: this._createAllowableEnemyPositions(),
-			currentTurn: "player"
+			currentTurn: "player",
+			gameEnded: false
 		}
 	}
 
@@ -186,19 +187,15 @@ class App extends Component
 
 						if (parseInt(coordinate[0]) === 0 || this.state.playerBoard[parseInt(coordinate[0]) - 1][parseInt(coordinate[1])] === "X" || this.state.playerBoard[parseInt(coordinate[0]) - 1][parseInt(coordinate[1])] === "O") {
 							allDirections.splice(allDirections.indexOf("left"), 1);
-							//console.log("cant go left")
 						}
 						if (parseInt(coordinate[0]) === 9 || this.state.playerBoard[parseInt(coordinate[0]) + 1][parseInt(coordinate[1])] === "X" || this.state.playerBoard[parseInt(coordinate[0]) + 1][parseInt(coordinate[1])] === "O") {
 							allDirections.splice(allDirections.indexOf("right"), 1);
-							//console.log("cant go right")
 						}
 						if (parseInt(coordinate[1]) === 0 || this.state.playerBoard[parseInt(coordinate[0])][parseInt(coordinate[1]) - 1] === "X" || this.state.playerBoard[parseInt(coordinate[0])][parseInt(coordinate[1]) - 1] === "O") {
 							allDirections.splice(allDirections.indexOf("up"), 1);
-							//console.log("cant go up")
 						}
 						if (parseInt(coordinate[1]) === 9 || this.state.playerBoard[parseInt(coordinate[0])][parseInt(coordinate[1]) + 1] === "X" || this.state.playerBoard[parseInt(coordinate[0])][parseInt(coordinate[1]) + 1] === "O") {
 							allDirections.splice(allDirections.indexOf("down"), 1);
-							//console.log("cant go down")
 						}
 
 						var pickDirection = allDirections[Math.floor(Math.random() * allDirections.length)];
@@ -215,8 +212,6 @@ class App extends Component
 						if (pickDirection === "down") {
 							enemyFireAt = [ parseInt(coordinate[0]), parseInt(coordinate[1]) + 1 ].join();
 						}
-						
-						//console.log("follow up shot", pickDirection, allDirections, enemyFireAt);
 					}
 
 					this.openFire({ coordinate: enemyFireAt });
@@ -224,7 +219,11 @@ class App extends Component
 			}
 		});
 
-		console.log(this.state.enemyPositions.length, this.state.playerPositions.length) //debug
+		if (this.state.enemyPositions.length === 0 || this.state.playerPositions.length === 0) {
+			this.setState( { gameEnded: true } )
+			var winner = (this.state.playerPositions.length === 0) ? "Enemy" : "Player";
+			this.setMessage("Game ended! " + winner + " is the winner!");
+		}
 	}
 
 	setMessage(msg)
@@ -248,7 +247,6 @@ class App extends Component
 				message={this.state.message}
 				shipButtonsStatus={this.state.shipButtonsStatus}
 				playerPositions={this.state.playerPositions}
-				//enemyPositions={this.state.enemyPositions}
 				currentBoard={boardToShow}
 				enemyVisualBoard={this.state.enemyVisualBoard} //debug
 				currenlyShowing={this.state.currentBoard}
@@ -259,7 +257,8 @@ class App extends Component
 				setEnemyShips={this.setEnemyShips.bind(this)}
 				changeCurrentBoard={this.changeCurrentBoard.bind(this)}
 				setPlayerShip={this.setPlayerShip.bind(this)}
-				setMessage={this.setMessage.bind(this)}/>
+				setMessage={this.setMessage.bind(this)}
+				gameEnded={this.state.gameEnded}/>
 			</section>
 		)
 	};

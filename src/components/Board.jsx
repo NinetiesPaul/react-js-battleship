@@ -53,7 +53,7 @@ class Board extends Component {
             }
         }
 
-        if (this.gameStage === 2) {
+        if (this.gameStage === 2 && !this.props.gameEnded) {
             if (this.props.currentTurn === "player" && this.props.currenlyShowing === "enemy") {
                 if (event.target.innerText === "") {
                     this.props.openFire({ coordinate: [posX, posY].join() })
